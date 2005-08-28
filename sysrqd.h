@@ -1,4 +1,4 @@
-#define PASS_LEN 32
+#define PASS_MAX_LEN 32
 #define PROMPT "sysrq> "
 #define SYSRQ_TRIGGER_PATH "/proc/sysrq-trigger"
 #define AUTH_FILE "/etc/sysrqd.secret"
