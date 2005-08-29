@@ -7,8 +7,6 @@ Create a password file:
 echo "mypassword" > /etc/sysrqd.secret
 chmod 0600 /etc/sysrqd.secret
 
-Copy init.d script to /etc/init.d/sysrqd if you want to start sysrqd at boot
-time, and add this script to your runlevel startup directory
-(rc2.d for example).
+Add it to your local daemons startup.
 
 If you need to tweak some paramaters, take a look on sysrqd.h
