@@ -59,7 +59,7 @@ auth (int sock_client)
   if(!strncmp(buf, pwd, strlen(pwd)))
     return 1;
   
-  write_cli (sock_client, "Damn it!\r\n");
+  write_cli (sock_client, "Go away!\r\n");
   return 0;
 }
 
@@ -152,8 +152,8 @@ read_pwd (void)
   close (fd_pwd);
   
   /* Strip last \n */
-  tmp = strchr(pwd, '\n');
-  *tmp = '\0';
+  if((tmp = strchr(pwd, '\n')))
+    *tmp = '\0';
 
   return 0;
 }

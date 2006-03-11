@@ -1,3 +1,6 @@
+Version 3 -- Sat, 11 Mar 2006 11:48:00 +0100
+	* Fix little bug if password file does not have \n
+
 Version 2 -- Mon, 29 Aug 2005 17:06:00 +0200
 	* Remove init.d script
 
