@@ -153,7 +153,7 @@ read_pwd (void)
   int fd_pwd;
   char * tmp;
   
-  if(!(fd_pwd = open (AUTH_FILE, O_RDONLY)))
+  if((fd_pwd = open (AUTH_FILE, O_RDONLY)) == -1)
     return 1;
   
   read (fd_pwd, pwd, PASS_MAX_LEN);
