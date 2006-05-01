@@ -1,3 +1,8 @@
+Version 4 -- Sun, 30 Apr 2006 21:50:51 +0200
+	* Add support of syslog
+	* Fork and run in background
+	* Write a pid file
+	
 Version 3 -- Sat, 11 Mar 2006 11:48:00 +0100
 	* Fix little bug if password file does not have \n
 

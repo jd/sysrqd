@@ -1,7 +1,7 @@
 /*
  * sysrqd.c - Daemon to control sysrq over network
  *
- * (c) 2005 Julien Danjou <julien@danjou.info>
+ * (c) 2005-2006 Julien Danjou <julien@danjou.info>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@
 #include <netdb.h>
 #include <string.h>
 #include <signal.h>
+#include <syslog.h>
+#include <arpa/inet.h>
 
 #include "sysrqd.h"
 
@@ -94,6 +96,7 @@ start_listen (int fd_sysrq)
   socklen_t size_addr;
   struct sockaddr_in addr;
   struct sockaddr_in addr_client;
+  int opt;
 
   addr.sin_family = AF_INET;
   addr.sin_port = htons(SYSRQD_LISTEN_PORT);
@@ -104,6 +107,10 @@ start_listen (int fd_sysrq)
       perror("Error while creating server socket");
       return 1;
     }
+  
+  /* We tries to avoid "socket already in use" errors */
+  opt = 1;
+  setsockopt(sock_serv, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof (opt));
 
   if(bind (sock_serv, (struct sockaddr *) &addr, sizeof (addr)))
     {
@@ -118,6 +125,8 @@ start_listen (int fd_sysrq)
     }
 
   size_addr = sizeof (addr_client);
+  
+  syslog(LOG_PID||LOG_DAEMON, "Listening on port tcp/%d", SYSRQD_LISTEN_PORT);
 
   while((sock_client = accept (sock_serv, (struct sockaddr *) &addr_client, &size_addr)))
     {
@@ -181,15 +190,68 @@ catch_signals ()
   return 0;
 }
 
+
+int
+write_pidfile(pid_t pid)
+{
+  int pidfile;
+  char pidstr[5];
+  
+  if(!(pidfile = open (PID_FILE, O_WRONLY|O_TRUNC|O_CREAT, 0644)))
+    return 1;
+  
+  snprintf(pidstr, 5, "%d", pid);
+  
+  write (pidfile, pidstr, sizeof (pidstr));
+
+  close(pidfile);
+  
+  return 0;
+}
+
 int
 main (void)
 {
   int fd_sysrq;
+  
+  /* We test if it is worth the pain to fork if setpriority would fail */
+  if(getuid() != 0)
+    {
+      errmsg ("Only root can run this program.");
+      return 1;
+    }
+  
+  /* We read our password */
+  if(read_pwd ())
+    {
+      errmsg ("Error while reading password file ("AUTH_FILE").");
+      return 1;
+    }
+  
+  /* We fork */
+  switch (fork())
+    {
+    case 0:
+      break;
+    case -1:
+      errmsg ("Unable to fork.");
+      return 1;
+      break;
+    default:
+      return 0;
+      break;
+    }
+
+  openlog ("sysrqd", LOG_PID, LOG_DAEMON);
+  syslog (LOG_PID||LOG_DAEMON, "sysrqd started");
+
+  if(write_pidfile(getpid()))
+    syslog (LOG_PID||LOG_DAEMON, "Unable to write pidfile");
 
   /* We set our priority */
   if(setpriority (PRIO_PROCESS, 0, SYSRQD_PRIO))
     {
-      errmsg ("Unable to set priority.");
+      syslog (LOG_PID||LOG_DAEMON, "Unable to set priority.");
       return 1;
     }
 
@@ -203,19 +265,14 @@ main (void)
       return 1;
     }
 
-  /* We read our password */
-  if(read_pwd ())
-    {
-      errmsg ("Error while reading password file.");
-      return 1;
-    }
-
   /* Now listen */
   if(!start_listen (fd_sysrq))
     return 1;
   
   /* If we quit, close the trigger */
   close (fd_sysrq);
-
+  
+  closelog();
+  
   return (EXIT_SUCCESS);
 }
