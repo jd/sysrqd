@@ -1,3 +1,6 @@
+Version 7 -- Tue, 16 May 2006 15:55:55 +0200
+	* Call daemon() instead of simply forking
+
 Version 6 -- Tue, 16 May 2006 15:00:44 +0200
 	* Fix bug with pid file
 	 (Thanks to Norbert Kiesel <nkiesel@tbdnetworks.com>)
