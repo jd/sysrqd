@@ -223,20 +223,9 @@ main (void)
       return 1;
     }
   
-  /* We fork */
-  switch (fork())
-    {
-    case 0:
-      break;
-    case -1:
-      errmsg ("Unable to fork.");
-      return 1;
-      break;
-    default:
-      return 0;
-      break;
-    }
-
+  /* We daemonize */
+  daemon(0, 0);
+  
   openlog ("sysrqd", LOG_PID, LOG_DAEMON);
   syslog (LOG_PID||LOG_DAEMON, "sysrqd started");
 
