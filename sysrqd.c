@@ -194,17 +194,12 @@ catch_signals ()
 int
 write_pidfile(pid_t pid)
 {
-  int pidfile;
-  char pidstr[5];
-  
-  if(!(pidfile = open (PID_FILE, O_WRONLY|O_TRUNC|O_CREAT, 0644)))
+  FILE *pidf = fopen(PID_FILE, "w");
+  if (pidf == NULL)
     return 1;
-  
-  snprintf(pidstr, 5, "%d", pid);
-  
-  write (pidfile, pidstr, sizeof (pidstr));
 
-  close(pidfile);
+  fprintf(pidf, "%d\n", pid);
+  fclose(pidf);
   
   return 0;
 }
