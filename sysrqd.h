@@ -4,4 +4,4 @@
 #define AUTH_FILE "/etc/sysrqd.secret"
 #define PID_FILE "/var/run/sysrqd.pid"
 #define SYSRQD_PRIO -19
-#define SYSRQD_LISTEN_PORT 680
+#define SYSRQD_LISTEN_PORT 880
