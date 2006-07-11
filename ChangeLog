@@ -1,3 +1,8 @@
+Version 8 -- Tue, 11 Jul 2006 11:41:05 +0200
+	* Use official ports registered by IANA:
+	sysrqd          4094/tcp   sysrq daemon
+	sysrqd          4094/udp   sysrq daemon
+
 Version 7 -- Tue, 16 May 2006 15:55:55 +0200
 	* Call daemon() instead of simply forking
 

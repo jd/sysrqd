@@ -4,3 +4,8 @@ Its philosophy is to be very responsive under heavy load and try to be
 somehow reliable.
 
 Authentication is made by clear password.
+
+Connection should be made to port 4094.
+
+sysrqd          4094/tcp   sysrq daemon
+sysrqd          4094/udp   sysrq daemon
