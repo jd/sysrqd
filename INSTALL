@@ -3,6 +3,8 @@ Symple type:
 % make
 % make install
 
+Read the README file.
+
 Create a password file:
 echo "mypassword" > /etc/sysrqd.secret
 chmod 0600 /etc/sysrqd.secret
@@ -10,3 +12,7 @@ chmod 0600 /etc/sysrqd.secret
 Add it to your local daemons startup.
 
 If you need to tweak some paramaters, take a look on sysrqd.h
+
+You can add this lines to /etc/services:
+sysrqd          4094/tcp   # sysrq daemon
+sysrqd          4094/udp   # sysrq daemon

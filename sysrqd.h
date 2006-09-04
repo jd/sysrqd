@@ -1,3 +1,5 @@
+/* $Id$ */
+
 #define PASS_MAX_LEN 32
 #define PROMPT "sysrq> "
 #define SYSRQ_TRIGGER_PATH "/proc/sysrq-trigger"

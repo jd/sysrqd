@@ -1,3 +1,6 @@
+Version 9 -- Mon,  4 Sep 2006 11:07:05 +0200
+	Add a warning about TERM and KILL in README
+
 Version 8 -- Tue, 11 Jul 2006 11:41:05 +0200
 	* Use official ports registered by IANA:
 	sysrqd          4094/tcp   sysrq daemon
