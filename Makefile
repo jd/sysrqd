@@ -2,7 +2,7 @@ VERSION=$(shell grep '^Version' ChangeLog | head -n 1 | cut -d' ' -f2 | tr -d ' 
 BIN=sysrqd
 O=sysrqd.o
 LDFLAGS=
-CFLAGS=-W -Wall -DSYSRQD_VERSION="\"$(VERSION)\""
+CFLAGS=-W -Wall -DSYSRQD_VERSION="\"$(VERSION)\"" -O2
 
 SBINDIR=$(DESTDIR)/usr/sbin
 #MANDIR=$(DESTDIR)/usr/share/man/man1
