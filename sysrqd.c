@@ -79,6 +79,7 @@ read_bindip (void)
   if((fd_bindip = open (BINDIP_FILE, O_RDONLY)) == -1)
     return 1;
 	
+  memset(bindip, 0, BIND_MAX_LEN);
   read (fd_bindip, bindip, BIND_MAX_LEN);
   close (fd_bindip);
 
@@ -185,9 +186,12 @@ read_pwd (void)
   if((fd_pwd = open (AUTH_FILE, O_RDONLY)) == -1)
     return 1;
   
+  memset(pwd, 0, PASS_MAX_LEN);
   read (fd_pwd, pwd, PASS_MAX_LEN);
   close (fd_pwd);
-  
+
+  pwd[PASS_MAX_LEN - 1] = '\0';
+
   /* Strip last \n */
   if((tmp = strchr(pwd, '\n')))
     *tmp = '\0';
@@ -244,7 +248,7 @@ main (void)
       errmsg ("Only root can run this program.");
       return 1;
     }
-  
+
   /* We read our password */
   if(read_pwd ())
     {
