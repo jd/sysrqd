@@ -34,10 +34,13 @@
 #include <signal.h>
 #include <syslog.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/mman.h>
 
 #include "sysrqd.h"
 
 char pwd[PASS_MAX_LEN];
+char bindip[BIND_MAX_LEN];
 int sock_serv;
 
 /* Macro used to write the prompt */
@@ -63,6 +66,26 @@ auth (int sock_client)
     return 1;
   
   write_cli (sock_client, "Go away!\r\n");
+  return 0;
+}
+
+/* Read the ip address */
+int
+read_bindip (void)
+{
+  int fd_bindip;
+  char * tmp;
+
+  if((fd_bindip = open (BINDIP_FILE, O_RDONLY)) == -1)
+    return 1;
+	
+  read (fd_bindip, bindip, BIND_MAX_LEN);
+  close (fd_bindip);
+
+  /* Strip last \n */
+  if((tmp = strchr(bindip, '\n')))
+    *tmp = '\0';
+	
   return 0;
 }
 
@@ -102,7 +125,11 @@ start_listen (int fd_sysrq)
 
   addr.sin_family = AF_INET;
   addr.sin_port = htons(SYSRQD_LISTEN_PORT);
-  addr.sin_addr.s_addr = INADDR_ANY;
+
+  if (read_bindip())
+    addr.sin_addr.s_addr = INADDR_ANY;
+  else
+    inet_aton(bindip, &addr.sin_addr);
 
   if(!(sock_serv = socket (PF_INET, SOCK_STREAM, 0)))
     {
@@ -224,7 +251,10 @@ main (void)
       errmsg ("Error while reading password file ("AUTH_FILE").");
       return 1;
     }
-  
+
+  /* mlock, we want this to always run */
+  mlockall(MCL_FUTURE);
+
   /* We daemonize */
   daemon(0, 0);
   

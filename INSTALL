@@ -3,13 +3,17 @@ Symple type:
 % make
 % make install
 
-Read the README file.
+- Read the README file.
 
-Create a password file:
-echo "mypassword" > /etc/sysrqd.secret
-chmod 0600 /etc/sysrqd.secret
+- Create a password file:
+  echo "mypassword" > /etc/sysrqd.secret
+  chmod 0600 /etc/sysrqd.secret
 
-Add it to your local daemons startup.
+- Optionnaly, create a bind file to bind to a specific IP
+  echo 192.168.2.13 > /etc/sysrqd.bind
+
+- Add it to your local daemons startup.
+
 
 If you need to tweak some paramaters, take a look on sysrqd.h
 

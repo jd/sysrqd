@@ -1,5 +1,9 @@
-Version 9 -- Mon,  4 Sep 2006 11:07:05 +0200
-	Add a warning about TERM and KILL in README
+Version 9 -- Fri, 19 Jan 2007 15:32:00 +0100
+	* Add a warning about TERM and KILL in README
+	* Merge a patch from Neil McGovern:
+	  - don't go in swap, always stay in memory
+	  - if /etc/sysrqd.bind exists, bind to a specific ip
+	    instead of any.
 
 Version 8 -- Tue, 11 Jul 2006 11:41:05 +0200
 	* Use official ports registered by IANA:
