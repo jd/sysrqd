@@ -1,7 +1,7 @@
 /*
  * sysrqd.c - Daemon to control sysrq over network
  *
- * (c) 2005-2006 Julien Danjou <julien@danjou.info>
+ * © 2005-2007 Julien Danjou <julien@danjou.info>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,22 +69,24 @@ auth (int sock_client)
   return 0;
 }
 
-/* Read the ip address */
+/* Read a configuration file */
 int
-read_bindip (void)
+read_conffile (char *file, char* buf, size_t buflen)
 {
-  int fd_bindip;
+  int fd;
   char * tmp;
 
-  if((fd_bindip = open (BINDIP_FILE, O_RDONLY)) == -1)
+  if((fd = open (file, O_RDONLY)) == -1)
     return 1;
 	
-  memset(bindip, 0, BIND_MAX_LEN);
-  read (fd_bindip, bindip, BIND_MAX_LEN);
-  close (fd_bindip);
+  memset(buf, 0, buflen);
+  read (fd, buf, buflen);
+  close (fd);
+
+  pwd[buflen - 1] = '\0';
 
   /* Strip last \n */
-  if((tmp = strchr(bindip, '\n')))
+  if((tmp = strchr(buf, '\n')))
     *tmp = '\0';
 	
   return 0;
@@ -127,7 +129,7 @@ start_listen (int fd_sysrq)
   addr.sin_family = AF_INET;
   addr.sin_port = htons(SYSRQD_LISTEN_PORT);
 
-  if (read_bindip())
+  if (read_conffile(BINDIP_FILE, bindip, BIND_MAX_LEN))
     addr.sin_addr.s_addr = INADDR_ANY;
   else
     inet_aton(bindip, &addr.sin_addr);
@@ -176,28 +178,6 @@ open_sysrq_trigger (void)
   return open (SYSRQ_TRIGGER_PATH, O_SYNC|O_WRONLY);
 }
 
-/* Read the sysrqd password */
-int
-read_pwd (void)
-{
-  int fd_pwd;
-  char * tmp;
-  
-  if((fd_pwd = open (AUTH_FILE, O_RDONLY)) == -1)
-    return 1;
-  
-  memset(pwd, 0, PASS_MAX_LEN);
-  read (fd_pwd, pwd, PASS_MAX_LEN);
-  close (fd_pwd);
-
-  pwd[PASS_MAX_LEN - 1] = '\0';
-
-  /* Strip last \n */
-  if((tmp = strchr(pwd, '\n')))
-    *tmp = '\0';
-
-  return 0;
-}
 
 void
 signal_handler (void)
@@ -250,7 +230,7 @@ main (void)
     }
 
   /* We read our password */
-  if(read_pwd ())
+  if(read_conffile (AUTH_FILE, pwd, PASS_MAX_LEN))
     {
       errmsg ("Error while reading password file ("AUTH_FILE").");
       return 1;
