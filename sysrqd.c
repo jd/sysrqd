@@ -1,7 +1,7 @@
 /*
  * sysrqd.c - Daemon to control sysrq over network
  *
- * © 2005-2007 Julien Danjou <julien@danjou.info>
+ * © 2005-2008 Julien Danjou <julien@danjou.info>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ int sock_serv;
 	fprintf(stderr, "%s (%s:%d)\n", s, __FILE__, __LINE__);
 
 /* Authenticate the connection */
-int
+static int
 auth (int sock_client)
 {
   char buf[PASS_MAX_LEN];
@@ -70,8 +70,8 @@ auth (int sock_client)
 }
 
 /* Read a configuration file */
-int
-read_conffile (char *file, char* buf, size_t buflen)
+static int
+read_conffile (const char *file, char* buf, size_t buflen)
 {
   int fd;
   char * tmp;
@@ -93,7 +93,7 @@ read_conffile (char *file, char* buf, size_t buflen)
 }
 
 /* Read commands */
-void
+static void
 read_cmd (int sock_client, int fd_sysrq)
 {
   char buf;
@@ -117,7 +117,7 @@ read_cmd (int sock_client, int fd_sysrq)
  * authenticate connection
  * and execute commands
 */
-int
+static int
 start_listen (int fd_sysrq)
 {
   int sock_client;
@@ -172,21 +172,21 @@ start_listen (int fd_sysrq)
   return 0;
 }
 
-int
+static int
 open_sysrq_trigger (void)
 {
   return open (SYSRQ_TRIGGER_PATH, O_SYNC|O_WRONLY);
 }
 
 
-void
+static void __attribute__ ((noreturn))
 signal_handler (void)
 {
   close (sock_serv);
   exit (EXIT_FAILURE);
 }
 
-int
+static int
 catch_signals ()
 {
   struct sigaction sa;
@@ -204,7 +204,7 @@ catch_signals ()
 }
 
 
-int
+static int
 write_pidfile(pid_t pid)
 {
   FILE *pidf = fopen(PID_FILE, "w");
