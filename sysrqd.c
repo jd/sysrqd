@@ -16,9 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  *
- * $Id$
  */
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +35,15 @@
 #include <netinet/in.h>
 #include <sys/mman.h>
 
-#include "sysrqd.h"
+#define PASS_MAX_LEN 32
+#define BIND_MAX_LEN 16
+#define PROMPT "sysrq> "
+#define SYSRQ_TRIGGER_PATH "/proc/sysrq-trigger"
+#define AUTH_FILE "/etc/sysrqd.secret"
+#define BINDIP_FILE "/etc/sysrqd.bind"
+#define PID_FILE "/var/run/sysrqd.pid"
+#define SYSRQD_PRIO -19
+#define SYSRQD_LISTEN_PORT 4094
 
 char pwd[PASS_MAX_LEN];
 char bindip[BIND_MAX_LEN];

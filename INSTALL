@@ -15,7 +15,8 @@ Symple type:
 - Add it to your local daemons startup.
 
 
-If you need to tweak some paramaters, take a look on sysrqd.h
+If you need to tweak some paramaters, take a look on define at the beginning
+of sysrqd.c
 
 You can add this lines to /etc/services:
 sysrqd          4094/tcp   # sysrq daemon
