@@ -79,10 +79,13 @@ static int
 read_conffile (const char *file, char* buf, size_t buflen)
 {
   int fd;
-  char * tmp;
 
   if((fd = open (file, O_RDONLY)) == -1)
-    return 1;
+  {
+      fprintf(stderr, "Unable to open file ");
+      perror(file);
+      return 1;
+  }
 	
   memset(buf, 0, buflen);
   read (fd, buf, buflen);
@@ -91,6 +94,7 @@ read_conffile (const char *file, char* buf, size_t buflen)
   buf[buflen - 1] = '\0';
 
   /* Strip last \n */
+  char *tmp;
   if((tmp = strchr(buf, '\n')))
     *tmp = '\0';
 	
@@ -230,10 +234,7 @@ main (void)
 
   /* We read our password */
   if(read_conffile (AUTH_FILE, pwd, PASS_MAX_LEN))
-    {
-      errmsg ("Error while reading password file ("AUTH_FILE").");
-      return 1;
-    }
+      return EXIT_FAILURE;
 
   /* mlock, we want this to always run */
   mlockall(MCL_CURRENT | MCL_FUTURE);
