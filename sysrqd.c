@@ -67,9 +67,9 @@ auth (int sock_client)
   char buf[PASS_MAX_LEN];
     
   write_cli (sock_client, "sysrqd password: ");
-  read (sock_client, buf, PASS_MAX_LEN);
-  if(!strncmp(buf, pwd, strlen(pwd)))
-    return 1;
+  if(read(sock_client, buf, PASS_MAX_LEN) > 0)
+      if(strcmp(buf, pwd))
+        return 1;
   
   write_cli (sock_client, "Go away!\r\n");
   return 0;
