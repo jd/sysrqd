@@ -48,13 +48,13 @@
 char pwd[PASS_MAX_LEN];
 int sock_serv;
 
+/* Macro used to write a string to the client */
+#define write_cli(s) \
+	write(sock_client, s, sizeof(s) - 1);
+
 /* Macro used to write the prompt */
 #define write_prompt(s) \
-	write (s, PROMPT, sizeof(PROMPT) - 1);
-
-/* Macro used to write a string to the client */
-#define write_cli(sock, s) \
-	write (sock, s, strlen(s));
+	write_cli(PROMPT);
 
 #define errmsg(s) \
 	fprintf(stderr, "%s (%s:%d)\n", s, __FILE__, __LINE__);
@@ -65,12 +65,12 @@ auth (int sock_client)
 {
   char buf[PASS_MAX_LEN];
     
-  write_cli (sock_client, "sysrqd password: ");
+  write_cli("sysrqd password: ");
   if(read(sock_client, buf, PASS_MAX_LEN) > 0)
       if(strcmp(buf, pwd))
         return 1;
   
-  write_cli (sock_client, "Go away!\r\n");
+  write_cli("Go away!\r\n");
   return 0;
 }
 
@@ -103,11 +103,11 @@ read_cmd (int sock_client, int fd_sysrq)
 {
   char buf = 0;
   
-  write_prompt (sock_client);
+  write_prompt();
   do
     {
       if(buf == '\n')
-	write_prompt (sock_client);
+	write_prompt();
 
       if((buf >= 48 && buf <= 57) ||
 	 (buf >= 97 && buf <= 122 ))
