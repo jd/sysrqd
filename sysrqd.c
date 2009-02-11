@@ -250,10 +250,10 @@ main (void)
 
   /* We set our priority */
   if(setpriority (PRIO_PROCESS, 0, SYSRQD_PRIO))
-    {
+  {
       syslog (LOG_PID | LOG_DAEMON, "Unable to set priority.");
-      return 1;
-    }
+      return EXIT_FAILURE;
+  }
 
   /* Catch some signals */
   catch_signals ();
@@ -263,17 +263,17 @@ main (void)
   if(fd_sysrq == -1)
   {
       perror("Error while opening sysrq trigger");
-      return 1;
+      return EXIT_FAILURE;
   }
 
   /* Now listen */
   if(!start_listen (fd_sysrq))
-    return 1;
+      return EXIT_FAILURE;
   
   /* If we quit, close the trigger */
   close (fd_sysrq);
   
   closelog();
   
-  return (EXIT_SUCCESS);
+  return EXIT_SUCCESS;
 }
