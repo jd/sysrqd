@@ -1,7 +1,7 @@
 /*
  * sysrqd.c - Daemon to control sysrq over network
  *
- * © 2005-2008 Julien Danjou <julien@danjou.info>
+ * © 2005-2009 Julien Danjou <julien@danjou.info>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
