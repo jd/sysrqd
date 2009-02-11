@@ -51,11 +51,11 @@ int sock_serv;
 
 /* Macro used to write the prompt */
 #define write_prompt(s) \
-	write (s, PROMPT, sizeof(char) * strlen(PROMPT));
+	write (s, PROMPT, sizeof(PROMPT) - 1);
 
 /* Macro used to write a string to the client */
 #define write_cli(sock, s) \
-	write (sock, s, sizeof(char) * strlen(s));
+	write (sock, s, strlen(s));
 
 #define errmsg(s) \
 	fprintf(stderr, "%s (%s:%d)\n", s, __FILE__, __LINE__);
