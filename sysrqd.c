@@ -184,7 +184,6 @@ open_sysrq_trigger (void)
   return open (SYSRQ_TRIGGER_PATH, O_SYNC|O_WRONLY);
 }
 
-
 static void __attribute__ ((noreturn))
 signal_handler (void)
 {
@@ -193,7 +192,7 @@ signal_handler (void)
 }
 
 static int
-catch_signals ()
+catch_signals (void)
 {
   struct sigaction sa;
   sigset_t mask;
