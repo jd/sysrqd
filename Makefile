@@ -1,12 +1,11 @@
 VERSION=$(shell grep '^Version' ChangeLog | head -n 1 | cut -d' ' -f2 | tr -d ' ')
 BIN=sysrqd
 O=sysrqd.o
-LDFLAGS=
-CFLAGS=-W -Wall -Wextra \
-       -Wundef -Wshadow -Wcast-align -Wwrite-strings -Wsign-compare \
-       -Wunused -Winit-self -Wpointer-arith -Wredundant-decls \
-       -Wmissing-prototypes -Wmissing-format-attribute -Wmissing-noreturn \
-       -std=gnu99 -pipe -DSYSRQD_VERSION="\"$(VERSION)\"" -O3
+CFLAGS+=-W -Wall -Wextra \
+        -Wundef -Wshadow -Wcast-align -Wwrite-strings -Wsign-compare \
+        -Wunused -Winit-self -Wpointer-arith -Wredundant-decls \
+        -Wmissing-prototypes -Wmissing-format-attribute -Wmissing-noreturn \
+        -std=gnu99 -pipe -DSYSRQD_VERSION="\"$(VERSION)\"" -O3
 
 SBINDIR=$(DESTDIR)/usr/sbin
 #MANDIR=$(DESTDIR)/usr/share/man/man1
