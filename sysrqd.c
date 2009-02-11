@@ -46,7 +46,6 @@
 #define SYSRQD_LISTEN_PORT 4094
 
 char pwd[PASS_MAX_LEN];
-char bindip[BIND_MAX_LEN];
 int sock_serv;
 
 /* Macro used to write the prompt */
@@ -131,6 +130,7 @@ start_listen (int fd_sysrq)
   struct sockaddr_in addr;
   struct sockaddr_in addr_client;
   int opt;
+  char bindip[BIND_MAX_LEN];
 
   addr.sin_family = AF_INET;
   addr.sin_port = htons(SYSRQD_LISTEN_PORT);
