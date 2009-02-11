@@ -88,7 +88,7 @@ read_conffile (const char *file, char* buf, size_t buflen)
   read (fd, buf, buflen);
   close (fd);
 
-  pwd[buflen - 1] = '\0';
+  buf[buflen - 1] = '\0';
 
   /* Strip last \n */
   if((tmp = strchr(buf, '\n')))
