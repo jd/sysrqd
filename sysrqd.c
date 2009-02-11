@@ -178,12 +178,6 @@ start_listen (int fd_sysrq)
   return 0;
 }
 
-static int
-open_sysrq_trigger (void)
-{
-  return open (SYSRQ_TRIGGER_PATH, O_SYNC|O_WRONLY);
-}
-
 static void __attribute__ ((noreturn))
 signal_handler (void)
 {
@@ -264,11 +258,12 @@ main (void)
   catch_signals ();
 
   /* We keep the sysrq-trigger file opened */
-  if(!(fd_sysrq = open_sysrq_trigger ()))
-    {
-      errmsg ("Error while opening sysrq trigger.");
+  fd_sysrq = open(SYSRQ_TRIGGER_PATH, O_SYNC|O_WRONLY);
+  if(fd_sysrq == -1)
+  {
+      perror("Error while opening sysrq trigger");
       return 1;
-    }
+  }
 
   /* Now listen */
   if(!start_listen (fd_sysrq))
