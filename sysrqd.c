@@ -34,6 +34,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/mman.h>
+#include <errno.h>
 
 #define PASS_MAX_LEN 32
 #define BIND_MAX_LEN 16
@@ -82,8 +83,9 @@ read_conffile (const char *file, char* buf, size_t buflen)
 
   if((fd = open (file, O_RDONLY)) == -1)
   {
-      fprintf(stderr, "Unable to open file ");
-      perror(file);
+      syslog(LOG_PID | LOG_DAEMON, "Unable to open file %s: %s",
+             file,
+             strerror(errno));
       return 1;
   }
 	
@@ -246,12 +248,13 @@ main (void)
   syslog (LOG_PID | LOG_DAEMON, "sysrqd started");
 
   if(write_pidfile(getpid()))
-    syslog (LOG_PID | LOG_DAEMON, "Unable to write pidfile");
+      syslog (LOG_PID | LOG_DAEMON, "Unable to write pidfile");
 
   /* We set our priority */
   if(setpriority (PRIO_PROCESS, 0, SYSRQD_PRIO))
   {
-      syslog (LOG_PID | LOG_DAEMON, "Unable to set priority.");
+      syslog (LOG_PID | LOG_DAEMON, "Unable to set priority: %s",
+              strerror(errno));
       return EXIT_FAILURE;
   }
 
@@ -262,7 +265,8 @@ main (void)
   fd_sysrq = open(SYSRQ_TRIGGER_PATH, O_SYNC|O_WRONLY);
   if(fd_sysrq == -1)
   {
-      perror("Error while opening sysrq trigger");
+      syslog(LOG_PID | LOG_DAEMON, "Error while opening sysrq trigger: %s",
+             strerror(errno));
       return EXIT_FAILURE;
   }
 
