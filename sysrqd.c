@@ -242,7 +242,7 @@ main (void)
     }
 
   /* mlock, we want this to always run */
-  mlockall(MCL_FUTURE);
+  mlockall(MCL_CURRENT | MCL_FUTURE);
 
   /* We daemonize */
   daemon(0, 0);
