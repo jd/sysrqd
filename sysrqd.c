@@ -114,7 +114,7 @@ read_cmd (int sock_client, int fd_sysrq)
 	 (buf >= 97 && buf <= 122 ))
 	write(fd_sysrq, &buf, 1);
     }
-  while(read (sock_client, &buf, 1) && buf != 'q');
+  while(read (sock_client, &buf, 1) == 1 && buf != 'q');
 }
 
 
