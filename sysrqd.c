@@ -102,7 +102,7 @@ read_conffile (const char *file, char* buf, size_t buflen)
 static void
 read_cmd (int sock_client, int fd_sysrq)
 {
-  char buf;
+  char buf = 0;
   
   write_prompt (sock_client);
   do
