@@ -164,7 +164,7 @@ start_listen (int fd_sysrq)
 
   size_addr = sizeof (addr_client);
   
-  syslog(LOG_PID||LOG_DAEMON, "Listening on port tcp/%d", SYSRQD_LISTEN_PORT);
+  syslog(LOG_PID | LOG_DAEMON, "Listening on port tcp/%d", SYSRQD_LISTEN_PORT);
 
   while((sock_client = accept (sock_serv, (struct sockaddr *) &addr_client, &size_addr)))
     {
@@ -242,15 +242,15 @@ main (void)
   daemon(0, 0);
   
   openlog ("sysrqd", LOG_PID, LOG_DAEMON);
-  syslog (LOG_PID||LOG_DAEMON, "sysrqd started");
+  syslog (LOG_PID | LOG_DAEMON, "sysrqd started");
 
   if(write_pidfile(getpid()))
-    syslog (LOG_PID||LOG_DAEMON, "Unable to write pidfile");
+    syslog (LOG_PID | LOG_DAEMON, "Unable to write pidfile");
 
   /* We set our priority */
   if(setpriority (PRIO_PROCESS, 0, SYSRQD_PRIO))
     {
-      syslog (LOG_PID||LOG_DAEMON, "Unable to set priority.");
+      syslog (LOG_PID | LOG_DAEMON, "Unable to set priority.");
       return 1;
     }
 
