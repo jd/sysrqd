@@ -151,26 +151,29 @@ start_listen (int fd_sysrq)
   }
 
   if(!(sock_serv = socket (PF_INET, SOCK_STREAM, 0)))
-    {
-      perror("Error while creating server socket");
+  {
+      syslog(LOG_PID | LOG_DAEMON, "Error while creating server socket: %s",
+             strerror(errno));
       return 1;
-    }
+  }
   
   /* We tries to avoid "socket already in use" errors */
   opt = 1;
   setsockopt(sock_serv, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof (opt));
 
   if(bind (sock_serv, (struct sockaddr *) &addr, sizeof (addr)))
-    {
-      perror("Unable to bind()");
+  {
+      syslog(LOG_PID | LOG_DAEMON, "Unable to bind(): %s",
+             strerror(errno));
       return 1;
-    }
+  }
 
   if(listen(sock_serv, 2))
-    {
-      perror("Unable to listen()");
+  {
+      syslog(LOG_PID | LOG_DAEMON, "Unable to listen(): %s",
+             strerror(errno));
       return 1;
-    }
+  }
 
   size_addr = sizeof (addr_client);
   
