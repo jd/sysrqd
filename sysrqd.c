@@ -97,7 +97,7 @@ read_conffile (const char *file, char* buf, size_t buflen)
   }
 	
   memset(buf, 0, buflen);
-  read (fd, buf, buflen);
+  read (fd, buf, buflen - 1);
   close (fd);
 
   buf[buflen - 1] = '\0';
@@ -148,8 +148,8 @@ start_listen (int fd_sysrq)
   addr.sin_family = AF_INET;
   addr.sin_port = htons(SYSRQD_LISTEN_PORT);
 
-  if(read_conffile(BINDIP_FILE, bindip, BIND_MAX_LEN))
-    addr.sin_addr.s_addr = INADDR_ANY;
+  if(read_conffile(BINDIP_FILE, bindip, sizeof(bindip)))
+      addr.sin_addr.s_addr = INADDR_ANY;
   else if(inet_aton(bindip, &addr.sin_addr))
   {
       syslog(LOG_ERR, "Unable to convert IP: %s, using INADDR_ANY",
@@ -257,7 +257,7 @@ main (void)
     }
 
   /* We read our password */
-  if(read_conffile (AUTH_FILE, pwd, PASS_MAX_LEN))
+  if(read_conffile (AUTH_FILE, pwd, sizeof(pwd)))
       return EXIT_FAILURE;
 
   /* mlock, we want this to always run */
