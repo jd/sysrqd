@@ -83,7 +83,7 @@ read_conffile (const char *file, char* buf, size_t buflen)
 
   if((fd = open (file, O_RDONLY)) == -1)
   {
-      syslog(LOG_PID | LOG_DAEMON, "Unable to open file %s: %s",
+      syslog(LOG_ERR, "Unable to open file %s: %s",
              file,
              strerror(errno));
       return 1;
@@ -145,14 +145,14 @@ start_listen (int fd_sysrq)
     addr.sin_addr.s_addr = INADDR_ANY;
   else if(inet_aton(bindip, &addr.sin_addr))
   {
-      syslog(LOG_PID | LOG_DAEMON, "Unable to convert IP: %s, using INADDR_ANY",
+      syslog(LOG_ERR, "Unable to convert IP: %s, using INADDR_ANY",
              strerror(errno));
       addr.sin_addr.s_addr = INADDR_ANY;
   }
 
   if(!(sock_serv = socket (PF_INET, SOCK_STREAM, 0)))
   {
-      syslog(LOG_PID | LOG_DAEMON, "Error while creating server socket: %s",
+      syslog(LOG_ERR, "Error while creating server socket: %s",
              strerror(errno));
       return 1;
   }
@@ -163,21 +163,21 @@ start_listen (int fd_sysrq)
 
   if(bind (sock_serv, (struct sockaddr *) &addr, sizeof (addr)))
   {
-      syslog(LOG_PID | LOG_DAEMON, "Unable to bind(): %s",
+      syslog(LOG_ERR, "Unable to bind(): %s",
              strerror(errno));
       return 1;
   }
 
   if(listen(sock_serv, 2))
   {
-      syslog(LOG_PID | LOG_DAEMON, "Unable to listen(): %s",
+      syslog(LOG_ERR, "Unable to listen(): %s",
              strerror(errno));
       return 1;
   }
 
   size_addr = sizeof (addr_client);
   
-  syslog(LOG_PID | LOG_DAEMON, "Listening on port tcp/%d", SYSRQD_LISTEN_PORT);
+  syslog(LOG_INFO, "Listening on port tcp/%d", SYSRQD_LISTEN_PORT);
 
   while((sock_client = accept (sock_serv, (struct sockaddr *) &addr_client, &size_addr)))
     {
@@ -280,7 +280,7 @@ main (void)
   fd_sysrq = open(SYSRQ_TRIGGER_PATH, O_SYNC|O_WRONLY);
   if(fd_sysrq == -1)
   {
-      syslog(LOG_PID | LOG_DAEMON, "Error while opening sysrq trigger: %s",
+      syslog(LOG_ERR, "Error while opening sysrq trigger: %s",
              strerror(errno));
       return EXIT_FAILURE;
   }
