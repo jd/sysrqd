@@ -141,10 +141,14 @@ start_listen (int fd_sysrq)
   addr.sin_family = AF_INET;
   addr.sin_port = htons(SYSRQD_LISTEN_PORT);
 
-  if (read_conffile(BINDIP_FILE, bindip, BIND_MAX_LEN))
+  if(read_conffile(BINDIP_FILE, bindip, BIND_MAX_LEN))
     addr.sin_addr.s_addr = INADDR_ANY;
-  else
-    inet_aton(bindip, &addr.sin_addr);
+  else if(inet_aton(bindip, &addr.sin_addr))
+  {
+      syslog(LOG_PID | LOG_DAEMON, "Unable to convert IP: %s, using INADDR_ANY",
+             strerror(errno));
+      addr.sin_addr.s_addr = INADDR_ANY;
+  }
 
   if(!(sock_serv = socket (PF_INET, SOCK_STREAM, 0)))
     {
