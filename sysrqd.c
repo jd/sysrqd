@@ -267,7 +267,7 @@ main (void)
   daemon(0, 0);
   
   openlog ("sysrqd", LOG_PID, LOG_DAEMON);
-  syslog (LOG_PID | LOG_DAEMON, "sysrqd started");
+  syslog(LOG_PID | LOG_DAEMON, "Starting");
 
   if(write_pidfile(getpid()))
       syslog (LOG_PID | LOG_DAEMON, "Unable to write pidfile");
