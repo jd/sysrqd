@@ -5,7 +5,7 @@ CFLAGS+=-W -Wall -Wextra \
         -Wundef -Wshadow -Wcast-align -Wwrite-strings -Wsign-compare \
         -Wunused -Winit-self -Wpointer-arith -Wredundant-decls \
         -Wmissing-prototypes -Wmissing-format-attribute -Wmissing-noreturn \
-        -std=gnu99 -pipe -DSYSRQD_VERSION="\"$(VERSION)\"" -O3
+        -std=gnu99 -pipe -DSYSRQD_VERSION="\"$(VERSION)\"" -O0
 
 SBINDIR=$(DESTDIR)/usr/sbin
 #MANDIR=$(DESTDIR)/usr/share/man/man1

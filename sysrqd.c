@@ -64,15 +64,22 @@ int sock_serv;
 static int
 auth (int sock_client)
 {
-  char buf[PASS_MAX_LEN];
+    char buf[PASS_MAX_LEN];
+    size_t len;
     
-  write_cli("sysrqd password: ");
-  if(read(sock_client, buf, PASS_MAX_LEN) > 0)
-      if(strcmp(buf, pwd))
-        return 1;
+    write_cli("sysrqd password: ");
+    memset(buf, 0, sizeof(buf));
+    if((len = read(sock_client, buf, sizeof(buf) - 1)) >= 2)
+    {
+        /* remove 2 because we get \r\n */
+        len -= 2;
+        buf[len] = '\0';
+        if(len == strlen(pwd) && !strcmp(buf, pwd))
+            return 1;
+    }
   
-  write_cli("Go away!\r\n");
-  return 0;
+    write_cli("Go away!\r\n");
+    return 0;
 }
 
 /* Read a configuration file */
