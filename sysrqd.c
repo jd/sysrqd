@@ -229,11 +229,19 @@ write_pidfile(pid_t pid)
   return 0;
 }
 
+static void
+do_on_exit(void)
+{
+    syslog(LOG_NOTICE, "Exiting");
+}
+
 int
 main (void)
 {
   int fd_sysrq;
   
+  atexit(do_on_exit);
+
   /* We test if it is worth the pain to fork if setpriority would fail */
   if(getuid() != 0)
     {
