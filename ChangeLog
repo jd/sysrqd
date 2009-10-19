@@ -1,3 +1,7 @@
+Version 11 -- Mon, 19 Oct 2009 11:30:52 +0200
+	* Do not try to write anything if read() has failed while reading
+	  password. Fix a crash using e.g. nmap.
+
 Version 10 -- Thu, 12 Feb 2009 12:05:54 +0100
 	* memset() our pwd/bindip
 	* Merge read password and bindfile functions
