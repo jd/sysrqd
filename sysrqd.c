@@ -69,7 +69,15 @@ auth (int sock_client)
     
     write_cli("sysrqd password: ");
     memset(buf, 0, sizeof(buf));
-    if((len = read(sock_client, buf, sizeof(buf) - 1)) >= 2)
+
+    /* Read password */
+    len = read(sock_client, buf, sizeof(buf) - 1);
+
+    /* Error? */
+    if(len == -1)
+        return 0;
+    /* If password has been sent */
+    else if(len >= 2)
     {
         /* remove 2 because we get \r\n */
         len -= 2;
