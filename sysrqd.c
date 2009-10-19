@@ -73,20 +73,18 @@ auth (int sock_client)
     /* Read password */
     len = read(sock_client, buf, sizeof(buf) - 1);
 
-    /* Error? */
-    if(len == -1)
-        return 0;
     /* If password has been sent */
-    else if(len >= 2)
+    if(len >= 2)
     {
         /* remove 2 because we get \r\n */
         len -= 2;
         buf[len] = '\0';
         if(len == strlen(pwd) && !strcmp(buf, pwd))
             return 1;
+        else
+            write_cli("Go away!\r\n");
     }
-  
-    write_cli("Go away!\r\n");
+
     return 0;
 }
 
