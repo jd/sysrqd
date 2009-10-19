@@ -225,6 +225,11 @@ catch_signals (void)
   sigaction (SIGINT, &sa, NULL);
   sigaction (SIGTERM, &sa, NULL);
 
+  /* ignore sigpipe */
+  sigemptyset(&mask);
+  sigaddset(&mask, SIGPIPE);
+  sigprocmask(SIG_BLOCK, &mask, NULL);
+
   return 0;
 }
 
