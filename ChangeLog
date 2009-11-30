@@ -1,3 +1,7 @@
+Version 13 -- Mon, 30 Nov 2009 09:51:24 +0100
+	* No code change, but version 12 was badly released with no changelog
+	  and bad tarball.
+
 Version 12 -- Mon, 19 Oct 2009 14:03:01 +0200
 	* Ignore SIGPIPE
 
