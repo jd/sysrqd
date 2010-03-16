@@ -1,3 +1,6 @@
+Version 14 -- Tue, 16 Mar 2010 16:54:22 +0100
+	* Fix authentification with clients not sending \r\n
+
 Version 13 -- Mon, 30 Nov 2009 09:51:24 +0100
 	* No code change, but version 12 was badly released with no changelog
 	  and bad tarball.
