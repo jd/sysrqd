@@ -6,6 +6,7 @@ CFLAGS+=-W -Wall -Wextra \
         -Wunused -Winit-self -Wpointer-arith -Wredundant-decls \
         -Wmissing-prototypes -Wmissing-format-attribute -Wmissing-noreturn \
         -std=gnu99 -pipe -DSYSRQD_VERSION="\"$(VERSION)\"" -O3
+LDFLAGS+=-lcrypt
 
 SBINDIR=$(DESTDIR)/usr/sbin
 #MANDIR=$(DESTDIR)/usr/share/man/man1
@@ -13,7 +14,7 @@ INSTALL = install
 #MAN=sysrqd.1
 
 $(BIN): $(O)
-	$(CC) $(LDFLAGS) -o $(BIN) $(O)
+	$(CC) -o $(BIN) $(O) $(LDFLAGS) 
 
 install: $(BIN)
 	$(INSTALL) -d -m 755 $(SBINDIR)

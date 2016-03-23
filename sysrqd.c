@@ -35,8 +35,9 @@
 #include <netinet/in.h>
 #include <sys/mman.h>
 #include <errno.h>
+#include <crypt.h>
 
-#define PASS_MAX_LEN 32
+#define PASS_MAX_LEN 256
 #define BIND_MAX_LEN 16
 #define PROMPT "sysrq> "
 #define SYSRQ_TRIGGER_PATH "/proc/sysrq-trigger"
@@ -66,6 +67,7 @@ auth (int sock_client)
 {
     char buf[PASS_MAX_LEN];
     size_t len;
+    char *crypt_result;
     
     write_cli("sysrqd password: ");
     memset(buf, 0, sizeof(buf));
@@ -82,10 +84,20 @@ auth (int sock_client)
     if(len > 0)
     {
         buf[len] = '\0';
-        if(!strcmp(buf, pwd))
-            return 1;
-        else
-            write_cli("Go away!\r\n");
+        /* Check if our stored password is crypted, i.e. starts with $[0-9]$ */
+        if(strlen(pwd) >= 34 && pwd[0] == '$' && pwd[2] == '$' && pwd[1] >= '0' && pwd[1] <= '9')
+        {
+            crypt_result = crypt(buf, pwd);
+            if(!strcmp(crypt_result, pwd))
+                return 1;
+            else
+                write_cli("Go away!\r\n");
+        } else {
+            if(!strcmp(buf, pwd))
+                return 1;
+            else
+                write_cli("Go away!\r\n");
+        }
     }
 
     return 0;
