@@ -1,3 +1,7 @@
+Version 16 -- Thu, 24 Mar 2016 14:43:33 CET
+	* Update README
+	* Add missing changelog entry
+
 Version 15 -- Thu, 24 Mar 2016 14:36:33 CET
 	* Allow to store password encrypted using crypt(3)
 
