@@ -1,3 +1,6 @@
+Version 15 -- Thu, 24 Mar 2016 14:36:33 CET
+	* Allow to store password encrypted using crypt(3)
+
 Version 14 -- Tue, 16 Mar 2010 16:54:22 +0100
 	* Fix authentification with clients not sending \r\n
 
