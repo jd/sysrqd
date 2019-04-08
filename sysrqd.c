@@ -171,7 +171,7 @@ start_listen (int fd_sysrq)
 
   if(read_conffile(BINDIP_FILE, bindip, sizeof(bindip)))
       addr.sin_addr.s_addr = INADDR_ANY;
-  else if(inet_aton(bindip, &addr.sin_addr))
+  else if(!inet_aton(bindip, &addr.sin_addr))
   {
       syslog(LOG_ERR, "Unable to convert IP: %s, using INADDR_ANY",
              strerror(errno));
