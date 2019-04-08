@@ -1,3 +1,6 @@
+Version 17 -- 8 Apr 2019
+	* Fix check of inet_aton() returned value
+
 Version 16 -- Thu, 24 Mar 2016 14:43:33 CET
 	* Update README
 	* Add missing changelog entry
