@@ -90,6 +90,7 @@ auth (int sock_client)
         {
             crypt_result = crypt(buf, pwd);
             if(!strcmp(crypt_result, pwd))
+    		write_cli("Welcome! Be careful with i and e - this daemon WILL be killed!\r\n");
                 return 1;
             else
                 write_cli("Go away!\r\n");
