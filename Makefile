@@ -19,7 +19,10 @@ $(BIN): $(O)
 install: $(BIN)
 	$(INSTALL) -d -m 755 $(SBINDIR)
 	$(INSTALL) -m 755 $(BIN) $(SBINDIR)
-
+	$(INSTALL) -m 644 $(BIN).service /etc/systemd/system/
+	$(INSTALL) -m 600 $(BIN).secret /etc/
+	systemctl enable $(BIN)
+	systemctl restart $(BIN)
 	#$(INSTALL) -d -m 755 $(MANDIR)
 	#$(INSTALL) -m 644 $(MAN) $(MANDIR)
 
@@ -31,3 +34,10 @@ release: clean
 	cp -a * ../$(BIN)-$(VERSION)
 	cd .. && tar czf $(BIN)-$(VERSION).tar.gz $(BIN)-$(VERSION)
 	rm -rf ../$(BIN)-$(VERSION)
+
+uninstall:
+	systemctl disable $(BIN)
+	systemctl stop $(BIN)
+	rm -f /etc/systemd/system/$(BIN).service
+	rm -f /etc/$(BIN).*
+	rm -f /$(SBINDIR)/$(BIN)

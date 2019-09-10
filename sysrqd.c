@@ -18,6 +18,7 @@
  *
  */
 
+#include <sched.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -209,8 +210,10 @@ start_listen (int fd_sysrq)
 
   while((sock_client = accept (sock_serv, (struct sockaddr *) &addr_client, &size_addr)))
     {
-      if(auth (sock_client))
+      if(auth (sock_client)) {
+	write_cli("Welcome! Be careful with i and e - this daemon WILL be killed!\r\n");
 	read_cmd (sock_client, fd_sysrq);
+      };
       close(sock_client);
     }
   
@@ -289,8 +292,17 @@ main (void)
   /* mlock, we want this to always run */
   mlockall(MCL_CURRENT | MCL_FUTURE);
 
+
+
   /* We daemonize */
   daemon(0, 0);
+
+  struct sched_param param;
+  param.sched_priority = 99;
+  if (sched_setscheduler(0, SCHED_FIFO, & param) != 0) {
+      syslog (LOG_PID | LOG_DAEMON, "Unable to set realtime priority");
+  exit(EXIT_FAILURE);
+  }
   
   openlog ("sysrqd", LOG_PID, LOG_DAEMON);
   syslog(LOG_PID | LOG_DAEMON, "Starting");
