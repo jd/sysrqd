@@ -20,7 +20,7 @@ install: $(BIN)
 	$(INSTALL) -d -m 755 $(SBINDIR)
 	$(INSTALL) -m 755 $(BIN) $(SBINDIR)
 	$(INSTALL) -m 644 $(BIN).service /etc/systemd/system/
-	$(INSTALL) -m 700 $(BIN).secret /etc/
+	$(INSTALL) -m 600 $(BIN).secret /etc/
 	systemctl enable $(BIN)
 	systemctl restart $(BIN)
 	#$(INSTALL) -d -m 755 $(MANDIR)
