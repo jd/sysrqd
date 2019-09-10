@@ -12,8 +12,7 @@ Symple type:
 - Optionnaly, create a bind file to bind to a specific IP
   echo 192.168.2.13 > /etc/sysrqd.bind
 
-- Add it to your local daemons startup.
-
+- Makefile will add it to systemd and start it
 
 If you need to tweak some paramaters, take a look on define at the beginning
 of sysrqd.c
@@ -21,3 +20,7 @@ of sysrqd.c
 You can add this lines to /etc/services:
 sysrqd          4094/tcp   # sysrq daemon
 sysrqd          4094/udp   # sysrq daemon
+
+% make uninstall 
+
+- Removes installed files, and disabled systemd service for it
