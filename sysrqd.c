@@ -90,7 +90,6 @@ auth (int sock_client)
         {
             crypt_result = crypt(buf, pwd);
             if(!strcmp(crypt_result, pwd)) {
-    		write_cli("Welcome! Be careful with i and e - this daemon WILL be killed!\r\n");
                 return 1; }
             else
                 write_cli("Go away!\r\n");
@@ -211,8 +210,10 @@ start_listen (int fd_sysrq)
 
   while((sock_client = accept (sock_serv, (struct sockaddr *) &addr_client, &size_addr)))
     {
-      if(auth (sock_client))
+      if(auth (sock_client)) {
+	write_cli("Welcome! Be careful with i and e - this daemon WILL be killed!\r\n");
 	read_cmd (sock_client, fd_sysrq);
+      };
       close(sock_client);
     }
   
