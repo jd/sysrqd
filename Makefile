@@ -34,3 +34,10 @@ release: clean
 	cp -a * ../$(BIN)-$(VERSION)
 	cd .. && tar czf $(BIN)-$(VERSION).tar.gz $(BIN)-$(VERSION)
 	rm -rf ../$(BIN)-$(VERSION)
+
+uninstall:
+	systemctl disable $(BIN)
+	systemctl stop $(BIN)
+	rm -f /etc/systemd/system/$(BIN).service
+	rm -f /etc/$(BIN).*
+	rm -f /$(SBINDIR)/$(BIN)
