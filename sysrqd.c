@@ -89,9 +89,9 @@ auth (int sock_client)
         if(strlen(pwd) >= 34 && pwd[0] == '$' && pwd[2] == '$' && pwd[1] >= '0' && pwd[1] <= '9')
         {
             crypt_result = crypt(buf, pwd);
-            if(!strcmp(crypt_result, pwd))
+            if(!strcmp(crypt_result, pwd)) {
     		write_cli("Welcome! Be careful with i and e - this daemon WILL be killed!\r\n");
-                return 1;
+                return 1; }
             else
                 write_cli("Go away!\r\n");
         } else {
